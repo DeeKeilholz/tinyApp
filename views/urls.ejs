@@ -11,9 +11,25 @@
    <% include partials/header %>
 </header>
 
+
+
 <% for (shortURL in urls) { %>
 <p><%= shortURL %> --> <%= urls[shortURL] %></p>
+
+<form method="POST" action="/urls/<%= shortURL %>/delete">
+<input type="submit" value="Delete">
+</form>
+
+<form method="GET" action="/urls/new">
+<input type="submit" value="Edit"/>
+</form>
+
 <% } %>
+
+
+
+
+
 
 </body>
 </html>

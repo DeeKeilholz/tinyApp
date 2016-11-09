@@ -2,12 +2,15 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(morgan('dev'));
 const PORT = process.env.PORT || 8080;
 
-app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(morgan('dev'));
 
+
+
+
+app.set("view engine", "ejs");
 
 
 
@@ -37,7 +40,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-
+//renders my urls.ejs which gives me a list of all short and longURLs
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase
@@ -45,40 +48,51 @@ app.get("/urls", (req, res) => {
   res.render("urls", templateVars);
 });
 
+// renders my urls_new ejs file which gives me a page where I can enter any URL
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:id", (req, res) => {
- let templateVars =
- { shortURL: req.params.id,
-   longURL: urlDatabase[req.params.id]
- };
- res.render("index", templateVars);
-});
-
-app.post("/urls/:id", (req, res) => {
+// setting short URL to my randomString function, passing shortURL to my database
+// so that a random string is created and setting it to the longURL I'm entering in my
+// form field in urls_new.ejs
+// redirecting to urls/whateverthenewshortURL is
+app.post("/urls", (req, res) => {
   var shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
 });
 
-// app.get("/urls/:id", (req, res) => {
-//  let templateVars =
-//  { shortURL: req.params.id,
-//    longURL: urlDatabase[req.params.id]
-//  };
-//  res.render("urls", templateVars);
-// });
 
+//adds the newly created shortURL to my path and renders "index"(the new shortURL
+// and my longURL)
+app.get("/urls/:shortURL", (req, res) => {
+ let templateVars =
+ { shortURL: req.params.shortURL,
+   longURL: urlDatabase[req.params.shortURL]
+ };
+ res.render("index", templateVars);
+});
+
+//redirects from /u/shortURL to the actual website (longURL)
 app.get("/u/:id", (req, res) => {
   let longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
 });
 
+// deletes a key out of my database using the form I set up in urls.ejs
+app.post("/urls/:shortURL/delete", (req, res) => {
+  let keyToDelete = req.params.shortURL
+  delete urlDatabase[keyToDelete];
+  res.redirect("/urls")
+});
 
-// Respond with a redirection to http://localhost:8080/urls/<shortURL>,
-// where <shortURL> indicates the random string you generated to represent the original URL.
+
+app.post('/urls/:shortURL/update', (req, res) => {
+  var editedURL = req.body.editedURL
+  urlDatabase[req.params.shortURL] = editedURL;
+  res.redirect("/urls");
+});
 
 
 app.listen(PORT, () => {
