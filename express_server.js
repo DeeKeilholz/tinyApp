@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('dev'));
 app.use(express.static('public'))
+app.use(cookieParser())
 
 
 
