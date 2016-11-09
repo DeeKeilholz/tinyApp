@@ -40,22 +40,22 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlDatabase,
-    title: "All my precious urls"
+    urls: urlDatabase
   };
   res.render("urls", templateVars);
 });
-
-
-app.get('/index', function(req, res) {
-    res.render("index");
-});
-
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+app.get("/urls/:id", (req, res) => {
+ let templateVars =
+ { shortURL: req.params.id,
+   longURL: urlDatabase[req.params.id]
+ };
+ res.render("index", templateVars);
+});
 
 app.post("/urls/:id", (req, res) => {
   var shortURL = generateRandomString();
@@ -63,11 +63,13 @@ app.post("/urls/:id", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-
-app.get("/urls/:id", (req, res) => {
-  let templateVars = {shortURL: req.params.id};
-  res.render("urls/:id", templateVars)
-});
+// app.get("/urls/:id", (req, res) => {
+//  let templateVars =
+//  { shortURL: req.params.id,
+//    longURL: urlDatabase[req.params.id]
+//  };
+//  res.render("urls", templateVars);
+// });
 
 app.get("/u/:id", (req, res) => {
   let longURL = urlDatabase[req.params.id];
