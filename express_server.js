@@ -1,14 +1,19 @@
+'use strict';
+
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser')
+const morgan = require('morgan')
+const cookieParser = require('cookie-parser');
+// const cookieSession = require('cookie-session')
 const PORT = process.env.PORT || 8080;
+const app = express();
+
 
 app.use(bodyParser.urlencoded({extended: true}));
+// app.use(cookieSession({ keys: 'session' }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
-app.use(cookieParser());
+app.use(cookieParser("some_secret"));
 
 
 
@@ -21,6 +26,8 @@ var urlDatabase = {
   "a0iijM": "http://www.noisli.com"
 };
 
+
+
 function generateRandomString() {
   let text = "";
   const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -31,9 +38,26 @@ function generateRandomString() {
   return text;
 }
 
+
 app.get("/", (req, res) => {
-  res.render("urls_new");
+   res.redirect("/urls/b2xVn2");
 });
+
+app.get("/login", (req, res) => {
+  let username = {username: false}
+  res.render("urls_login", username)
+})
+
+app.post("/login", (req, res) => {
+  let username = req.body.username
+  res.cookie("username", username, {signed: true})
+  res.redirect("/")
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie('username')
+  res.redirect("/")
+})
 
 app.post("/urls", (req, res) => {
   var shortURL = generateRandomString();
@@ -43,11 +67,17 @@ app.post("/urls", (req, res) => {
 
 // GET is for reading
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new")
+  const username = req.signedCookies.username
+  res.render("urls_new", username)
 });
 
+
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  const username = req.signedCookies.username
+  let templateVars = {
+    urls: urlDatabase,
+    username: username
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -66,9 +96,11 @@ app.post('/urls/:shortURL/update', (req, res) => {
 
 // display my data, make a get request to urls_show
 app.get("/urls/:shortURL", (req, res) => {
+  const username = req.signedCookies.username
   let templateVars = {
     shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL]
+    longURL: urlDatabase[req.params.shortURL],
+    username: username
   }
   res.render("urls_show", templateVars);
 });
@@ -80,11 +112,14 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 
-
 app.get("/urls/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);

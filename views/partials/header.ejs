@@ -1,13 +1,15 @@
+<% if (!username) { %>
 
+   <form action="/login" method="POST" style="margin:150px;">
+     <label for="username">Enter Username:</label>
+     <input id="username" type="text" name="username" style="width: 300px">
+     <input type="submit" value="Sign in">
+   </form>
 
-<!DOCTYPE html>
-<html lang="en">
+<% } else { %>
+    <p><%=`Your are logged in as ${username}`%><p>
 
-<head>
-  <title>My header partial</title>
-</head>
-<body>
-
-
-</body>
-</html>
+    <form method="POST" action="/logout">
+      <input type="submit" value="Logout">
+    </form>
+ <% } %>

@@ -11,7 +11,19 @@
   </header>
 
 
-  <p><h4>ShortURL:</h4><%= shortURL %></p>
+  <table>
+    <tr>
+      <td>
+        <h4>ShortURL:</h4>
+      </td>
+      <td>
+        <%= shortURL %>
+      </td>
+    </tr>
+  </table>
+
+
+
 
   <form method="POST" action="/urls/<%= shortURL %>/update">
             <label for="longURL"><h2>Enter a URL:</h2></label>
