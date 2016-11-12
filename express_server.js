@@ -20,11 +20,14 @@ app.use(cookieParser("some_secret"));
 app.set("view engine", "ejs");
 
 
-var urlDatabase = {
+let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
   "a0iijM": "http://www.noisli.com"
 };
+
+let users = {};
+
 
 
 
@@ -44,8 +47,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  let username = {username: false}
-  res.render("urls_login", username)
+  let email = {email: false}
+  res.render("urls_login", email)
 })
 
 app.post("/login", (req, res) => {
@@ -57,6 +60,20 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
   res.clearCookie('username')
   res.redirect("/")
+})
+
+
+app.get("/register", (req, res) => {
+  res.render("urls_register")
+})
+
+app.post("/register", (req, res) => {
+  // let userID = generateRandomString();
+  const newUser = {
+    email: req.body.email,
+    password: req.body.password
+  };
+  res.render("urls_login", newUser)
 })
 
 app.post("/urls", (req, res) => {
