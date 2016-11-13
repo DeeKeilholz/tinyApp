@@ -2,10 +2,22 @@
   <head></head>
 
   <head>
-    <title>My header partial</title>
+    <title>Login form</title>
   </head>
 
   <body style="font-size:20px; padding:50px;">
     <% include partials/header %>
+
+
+    <title>URL shortener</title>
+    <a href="/register">Register</a>
+    <br></br>
+
+    <form action="/login" method="POST">
+      <input type="email" name="email" placeholder="e-mail">
+      <input type="password" name="password" placeholder="Password">
+      <input type="submit" name="submit" value="Login">
+
+    </form>
   </body>
 </html>
