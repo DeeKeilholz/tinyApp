@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser');
+const _ = require('lodash');
 // const cookieSession = require('cookie-session')
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -26,14 +27,10 @@ let urlDatabase = {
   "a0iijM": "http://www.noisli.com"
 };
 
-let users = {"uniqueId": {
-  id: "uniqueId",
-  email: "abc@def.com",
-  password: "123",
-}}
+let users = {}
 // loops through all ids and returns the user information and then we check
 // in the information if the email is the same as the email provided in the
-// login form (compares entry email with the database)
+// login form (compares entry email with the database, fetches ID).
 const findIdUsingEmail = function (email) {
   for (let id in users) {
     if (users[id].email === email) {
@@ -130,20 +127,41 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   const userID = generateRandomString();
+  for (let id in users) {
+    if (req.body.email === users[id].email) {
+      res.status(400);
+      res.send("We already have an account registered for that email.");
+    };
+  };
+  if (req.body.email === "" || req.body.password === "") {
+    res.status(400);
+    res.send("Please enter a valid email and password.")
+  } else if (req.body.email) {
   users[userID] = {
     id: userID,
     email: req.body.email,
     password: req.body.password
+    }
   }
   res.cookie("user_id", userID);
   res.redirect("/")
-})
+});
 
 app.post("/login", (req, res) => {
-  const email = req.body.email
-  const userId = findIdUsingEmail(email);
-  res.cookie("user_id", userId);
-  res.redirect("/")
+//   const email = req.body.email
+//   const userId = findIdUsingEmail(email);
+
+const findEmail = _.findKey(users, {email: req.body.email})
+ if (!users[findEmail]) {
+   res.status(403)
+   res.send("Can't find this user. Maybe you need to <a href=\"register\">register</a>?")
+ } else if (req.body.password !== users[findEmail].password) {
+   res.status(403)
+   res.send("Wrong password, amigo!")
+ } else {
+   req.cookies.user_id = findEmail;
+   res.redirect("/")
+ }
 });
 
 app.post("/logout", (req, res) => {
