@@ -8,46 +8,42 @@
 <body>
 
 <header>
-   <% include partials/header %>
+   <%- include partials/header %>
 </header>
 
 <h1>All Them Prettay URLS</h1>
 
-<% for (shortURL in urls) { %>
+<% for (key in urls) { %>
 
 
 <table>
   <tr>
     <td>
-      <p><%= shortURL %> --> <%= urls[shortURL] %></p>
+      <p><a href = "/u/<%= key %>"><%= key %></a>  --> <%= urls[key].url %></p>
     </td>
     <td>
-      <form method="POST" action="/urls/<%= shortURL %>/delete">
+      <form method="POST" action="/urls/<%= key %>/delete">
       <input type="image" src="images/delete.png" value="Delete" />
+
+      <% if(username === urls[key].userId){ %>
+
+        <a href="/urls/<%= key %>"> Edit</a>
+        <input type="image" src="images/delete.png" value="Delete"></input>
+      <% }%>
+
       </form>
-    </td>
-    <td>
-      <form method="GET" action="/urls/<%= shortURL %>">
-        <input type="submit" value="Edit"/>
-      </form>
+
     </td>
   </tr>
 </table>
 
 
-
 <% } %>
 
-
-
-</div>
-<div class = "new URL">
- <br />
-<a href = "http://localhost:8080/urls/new"> Create New URL </a>
-</div>
-
-
-
+<% if(email){ %>
+   <p> Create a new <a href="/urls/new"> shortURL</a> here!</p>
+ <% }%>
 
 </body>
+
 </html>

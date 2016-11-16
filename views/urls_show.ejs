@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
+  <head>
+    <title>TinyApp</title>
+  </head>
 
-  <header>
-      <% include partials/header %>
-  </header>
-
+  <body>
 
   <table>
     <tr>
@@ -22,15 +18,15 @@
     </tr>
   </table>
 
-
-
-
-  <form method="POST" action="/urls/<%= shortURL %>/update">
+  <form method="POST" action=" action="/urls/<%= updatedURL %>">
             <label for="longURL"><h2>Enter a URL:</h2></label>
-            <input id="editedURL" type="text" name="editedURL" value="<%= longURL %>" style="width: 300px">
+            <input type="text" name="longURL" value="<%= longURL.url %>" style="width: 300px">
             <input type="submit" value="Update">
 
           </form>
+
+
+
 
 </body>
 </html>

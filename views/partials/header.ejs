@@ -1,20 +1,21 @@
-<% if (!email) { %>
 
-   <form action="/login" method="POST" style="margin:150px;">
-     <label for="username">Enter Username:</label>
-     <input id="username" type="text" name="username" style="width: 300px">
-     <input type="submit" value="Sign in">
-   </form>
 
+ <title>Link shortener</title>
+
+<% if(email) { %>
+  <p>Welcome back <%= email %></p>
+  <form action="/logout" method="POST">
+    <button>Logout</button>
+  </form>
 <% } else { %>
-    <p><%=`Your are logged in as ${email}`%><p>
+  <p>New user?</p>
 
-    <form method="POST" action="/logout">
-      <input type="submit" value="Logout">
-    </form>
- <% } %>
+  <a href="/register">Register here.</a>
 
+  <br>
 
+  <p>Existing user?</p>
 
+  <a href="/login">Login here.</a>
 
-   <a href="/register">Register</a>
+<% } %>
