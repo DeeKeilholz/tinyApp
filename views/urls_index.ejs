@@ -17,6 +17,7 @@
 
 
 <table>
+        <% if(username === urls[key].userId){ %>
   <tr>
     <td>
       <p><a href = "/u/<%= key %>"><%= key %></a>  --> <%= urls[key].url %></p>
@@ -25,16 +26,17 @@
       <form method="POST" action="/urls/<%= key %>/delete">
       <input type="image" src="images/delete.png" value="Delete" />
 
-      <% if(username === urls[key].userId){ %>
+
 
         <a href="/urls/<%= key %>"> Edit</a>
-        <input type="image" src="images/delete.png" value="Delete"></input>
-      <% }%>
+
+
 
       </form>
 
     </td>
   </tr>
+        <% }%>
 </table>
 
 

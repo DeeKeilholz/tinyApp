@@ -25,17 +25,17 @@ app.set("view engine", "ejs");
 
 
 let urlDatabase = {
-  "b2xVn2": {userId: 1, url: "http://www.lighthouselabs.ca"},
-  "9sm5xK": {userId: 1, url: "http://www.google.com"},
-  "a0iijM": {userId: 1, url: "http://www.noisli.com"}
+  // "b2xVn2": {userId: 1, url: "http://www.lighthouselabs.ca"},
+  // "9sm5xK": {userId: 1, url: "http://www.google.com"},
+  // "a0iijM": {userId: 1, url: "http://www.noisli.com"}
 };
 
 let users = {
-  "RandomUserID": {
-  id: "someId",
-  email: "someemail@email.com",
-  password: "somePassword"
-  }
+  // "RandomUserID": {
+  // id: "someId",
+  // email: "someemail@email.com",
+  // password: "somePassword"
+  // }
 };
 
 function generateRandomString() {
